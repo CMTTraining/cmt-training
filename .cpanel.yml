@@ -1,0 +1,5 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/cairnstr/cmttraining.com.au/
+    - /bin/cp -R * $DEPLOYPATH
