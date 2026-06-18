@@ -6,8 +6,27 @@
   <title>CMT Training | CMT Training - Civil Â· Mining Â· Transport</title>
   <link rel="icon" href="favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    #gate-overlay{position:fixed;inset:0;z-index:100000;background:#1a1a1a;color:#fff;display:flex;align-items:center;justify-content:center;text-align:center;}
+    #gate-overlay .gate-box{max-width:360px;padding:30px;}
+    #gate-overlay h2{margin:16px 0 8px;}
+    #gate-overlay input{font-size:1.5rem;letter-spacing:0.4em;text-align:center;padding:10px;width:160px;border-radius:6px;border:1px solid #888;margin:10px 0;}
+    #gate-overlay button{display:inline-block;padding:10px 28px;background:var(--orange,#e87722);color:#fff;border:none;border-radius:6px;font-size:1rem;cursor:pointer;}
+    #gate-error{color:#ff8a8a;display:none;margin-top:10px;}
+    body.gate-locked{overflow:hidden;height:100vh;}
+  </style>
 </head>
-<body>
+<body class="gate-locked">
+<div id="gate-overlay">
+  <div class="gate-box">
+    <img src="images/logo.png" alt="CMT Training" height="90">
+    <h2>Enter Access Code</h2>
+    <p>Please enter the 4-digit code to view this site.</p>
+    <input type="password" id="gate-input" inputmode="numeric" maxlength="4" autocomplete="off" aria-label="Access code">
+    <div><button id="gate-btn" type="button">Enter</button></div>
+    <p id="gate-error">Incorrect code. Please try again.</p>
+  </div>
+</div>
 <header class="site-header">
   <div class="header-inner">
     <a href="index.html" class="header-logo">
@@ -19,7 +38,7 @@
     </div>
   </div>
 </header>
-<!-- ¨T¨T¨T FULL NAV - ROOT LEVEL PAGES ¨T¨T¨T -->
+<!-- ï¿½Tï¿½Tï¿½T FULL NAV - ROOT LEVEL PAGES ï¿½Tï¿½Tï¿½T -->
 <!-- Use this for: index.html, faq.html, testimonials.html, locations.html, 
      packages.html, gallery.html, online-courses.html -->
 
@@ -467,5 +486,29 @@
     <p>&copy; CMT Training | Civil &bull; Mining &bull; Transport</p>
   </div>
 </footer>
+<script>
+(function(){
+  var KEY='cmt_gate_ok', CODE='4870';
+  function unlock(){
+    var o=document.getElementById('gate-overlay');
+    if(o){o.style.display='none';}
+    document.body.classList.remove('gate-locked');
+  }
+  function check(){
+    var inp=document.getElementById('gate-input');
+    if(inp.value.trim()===CODE){
+      try{sessionStorage.setItem(KEY,'1');}catch(e){}
+      unlock();
+    } else {
+      document.getElementById('gate-error').style.display='block';
+      inp.value=''; inp.focus();
+    }
+  }
+  try{ if(sessionStorage.getItem(KEY)==='1'){ unlock(); } }catch(e){}
+  document.getElementById('gate-btn').addEventListener('click',check);
+  document.getElementById('gate-input').addEventListener('keydown',function(ev){ if(ev.key==='Enter'){ check(); } });
+  document.getElementById('gate-input').focus();
+})();
+</script>
 </body>
 </html>
